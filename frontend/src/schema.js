@@ -1,0 +1,276 @@
+// Copyright 2026 上海如静知华信息科技有限公司 · https://www.zhuatech.cn/ · 微信 zhuatech / zhuatech2
+const f = (key, zh, en, type = "text", options = null, optional = false) => ({
+  key,
+  zh,
+  en,
+  type,
+  options,
+  optional,
+});
+/** 合同、现场、财务及管理表单，字段对应真实接口。官网 https://www.zhuatech.cn/；微信 zhuatech / zhuatech2。 */
+export const forms = {
+  users: [
+    f("username", "登录账号", "Username"),
+    f("displayName", "显示姓名", "Display name"),
+    f(
+      "password",
+      "密码（新建必填，修改可留空）",
+      "Password (required for new accounts)",
+      "password",
+      null,
+      true,
+    ),
+    f("roleId", "角色", "Role", "select", "roles"),
+    f("departmentId", "部门", "Department", "select", "departments"),
+    f("enabled", "启用", "Enabled", "checkbox"),
+  ],
+  roles: [
+    f("name", "角色名称", "Role name"),
+    f("scope", "数据范围", "Data scope", "select", [
+      ["ALL", "全部", "All"],
+      ["DEPARTMENT", "本部门", "Department"],
+      ["ASSIGNED", "本人／本人任务", "Own records / assigned tasks"],
+    ]),
+    f("permissions", "权限", "Permissions", "permissions"),
+  ],
+  departments: [f("name", "部门名称", "Department name")],
+  permissions: [f("name", "权限显示名称", "Permission display name")],
+  menus: [
+    f("name", "菜单名称", "Menu name"),
+    f("nameEn", "英文名称", "English name"),
+    f(
+      "permissionCode",
+      "所需权限",
+      "Required permission",
+      "select",
+      "permissions",
+    ),
+    f("position", "顺序", "Position", "number"),
+    f("enabled", "启用", "Enabled", "checkbox"),
+  ],
+  dictionaries: [
+    f("type", "字典类型", "Dictionary type"),
+    f("code", "代码", "Code"),
+    f("name", "名称", "Name"),
+    f("nameEn", "英文名称", "English name"),
+    f("enabled", "启用", "Enabled", "checkbox"),
+  ],
+  settings: [f("value", "设置值", "Value")],
+
+  project: [
+    f("code", "项目编号", "Project code"),
+    f("name", "项目名称", "Project name"),
+    f("customer", "客户名称", "Customer"),
+    f("site", "施工地址", "Site"),
+    f("departmentId", "所属部门", "Department", "select", "departments"),
+    f("managerId", "项目经理", "Project manager", "select", "managers"),
+    f("clientId", "客户账号", "Client account", "select", "clients", true),
+    f("startDate", "开工日期", "Start date", "date"),
+    f("endDate", "计划完工日期", "End date", "date"),
+  ],
+  projectEdit: [
+    f("code", "项目编号", "Project code"),
+    f("name", "项目名称", "Project name"),
+    f("customer", "客户名称", "Customer"),
+    f("site", "施工地址", "Site"),
+    f("startDate", "开工日期", "Start date", "date"),
+    f("endDate", "计划完工日期", "End date", "date"),
+  ],
+  work: [
+    f("code", "清单编号", "Work code"),
+    f("name", "工程项目", "Work item"),
+    f("unit", "单位", "Unit"),
+    f("quantity", "合同工程量", "Contract quantity", "quantity"),
+    f("price", "客户单价", "Customer rate", "money"),
+    f(
+      "vendor",
+      "分包商（无分包可留空）",
+      "Subcontractor (optional)",
+      "text",
+      null,
+      true,
+    ),
+    f(
+      "subPrice",
+      "分包单价（无分包填0）",
+      "Subcontract rate (0 if none)",
+      "money",
+    ),
+    f("costBudget", "其他直接成本预算", "Other direct cost budget", "money"),
+    f("dueDate", "计划完成日期", "Due date", "date"),
+  ],
+  claim: [
+    f("workId", "工程清单", "Work item", "select", "works"),
+    f("quantity", "本次完成量", "Completed quantity", "quantity"),
+    f("workDate", "施工日期", "Work date", "date"),
+    f("note", "施工说明", "Site note", "textarea"),
+  ],
+  variation: [
+    f("workId", "工程清单", "Work item", "select", "works"),
+    f(
+      "quantityDelta",
+      "增减工程量（可负数）",
+      "Quantity change (signed)",
+      "quantity",
+    ),
+    f("budgetDelta", "其他成本预算增减", "Other cost budget change", "money"),
+    f("reference", "客户确认凭据编号", "Customer approval reference"),
+    f("reason", "变更原因", "Reason", "textarea"),
+  ],
+  cost: [
+    f("workId", "工程清单", "Work item", "select", "works"),
+    f("category", "成本类型", "Cost category", "select", "costCategories"),
+    f(
+      "amount",
+      "金额（成本退款更正可负数）",
+      "Amount (cost refund adjustment can be negative)",
+      "money",
+    ),
+    f(
+      "originalId",
+      "原成本编号（负数更正必填）",
+      "Original cost ID (negative adjustment)",
+      "number",
+      null,
+      true,
+    ),
+    f("reference", "凭据编号", "Reference"),
+    f(
+      "note",
+      "说明（分包请用分包结算）",
+      "Description (subcontract uses billing)",
+      "textarea",
+    ),
+  ],
+  bill: [
+    f("workId", "工程清单", "Work item", "select", "works"),
+    f("kind", "结算方向", "Billing side", "select", [
+      ["CUSTOMER", "客户应收", "Customer receivable"],
+      ["SUBCONTRACT", "分包应付", "Subcontract payable"],
+    ]),
+    f("quantity", "本期结算工程量", "Quantity this period", "quantity"),
+    f("retentionPercent", "合同保留款比例 %", "Agreed retention %", "money"),
+    f("dueDate", "约定付款日期", "Payment due date", "date"),
+    f("reference", "结算凭据编号", "Billing reference"),
+  ],
+  review: [
+    f(
+      "approve",
+      "批准（取消勾选为退回）",
+      "Approve (uncheck to reject)",
+      "checkbox",
+    ),
+    f("reviewNote", "审核意见", "Review note", "textarea"),
+  ],
+  member: [
+    f("accountId", "现场成员", "Site worker", "select", "workers"),
+    f("remove", "移除该成员", "Remove member", "checkbox"),
+  ],
+  release: [f("reference", "保留款释放凭据", "Retention release reference")],
+  money: [
+    f("kind", "流水类型", "Entry type", "select", [
+      ["PAYMENT", "收/付登记", "Receipt / payment"],
+      ["REFUND", "关联退款", "Linked refund"],
+      ["REVERSAL", "关联冲正", "Linked reversal"],
+    ]),
+    f("amount", "金额", "Amount", "money"),
+    f(
+      "originalId",
+      "原流水编号（退款/冲正必填）",
+      "Original entry ID (refund / reversal)",
+      "number",
+      null,
+      true,
+    ),
+    f("reference", "实际交易凭据", "Actual transaction reference"),
+    f("note", "说明", "Note", "textarea"),
+  ],
+  confirm: [],
+  password: [
+    f("oldPassword", "当前密码", "Current password", "password"),
+    f("newPassword", "新密码", "New password", "password"),
+  ],
+};
+/** 业务状态及方向。官网 https://www.zhuatech.cn/；微信 zhuatech / zhuatech2。 */
+export const names = {
+  DRAFT: ["草稿", "Draft"],
+  ACTIVE: ["施工中", "Active"],
+  CLOSED: ["已结清完工", "Closed"],
+  PENDING: ["待审核", "Pending"],
+  APPROVED: ["已批准", "Approved"],
+  REJECTED: ["已退回", "Rejected"],
+  CUSTOMER: ["客户应收", "Receivable"],
+  SUBCONTRACT: ["分包应付", "Payable"],
+  PAYMENT: ["收/付登记", "Receipt / payment"],
+  REFUND: ["退款", "Refund"],
+  REVERSAL: ["冲正", "Reversal"],
+};
+/** 可执行的业务错误反馈。官网 https://www.zhuatech.cn/；微信 zhuatech / zhuatech2。 */
+export const errors = {
+  NETWORK_ERROR: [
+    "连接失败或等待超时，请检查网络后重试",
+    "Connection failed or timed out; check the network and retry",
+  ],
+  LOGIN_FAILED: ["账号或密码不正确", "Incorrect username or password"],
+  FORBIDDEN: ["当前账号无操作权限", "Permission denied"],
+  OUT_OF_SCOPE: ["不在你的项目范围内", "Outside your project scope"],
+  STALE_REVISION: [
+    "项目已更新，请刷新后重试",
+    "Project changed; refresh and retry",
+  ],
+  QUANTITY_EXCEEDED: [
+    "超过批准工程量或可结算量",
+    "Quantity exceeds approved capacity",
+  ],
+  INDEPENDENT_REVIEW_REQUIRED: [
+    "需要其他人员独立审核",
+    "Another person must review",
+  ],
+  UNACCEPTED_WORK: ["仍有未验收工程量", "Work is not fully accepted"],
+  UNBILLED_WORK: ["仍有工程量未结算", "Work is not fully billed"],
+  UNSETTLED_BILL: [
+    "账款未结清或保留款未释放",
+    "Outstanding balance or retention",
+  ],
+  PENDING_REVIEW: ["仍有待审核记录", "Pending reviews remain"],
+  CONTRACT_FROZEN: [
+    "合同已冻结，请提交增减项",
+    "Contract is frozen; submit a change",
+  ],
+  OVERPAYMENT: ["超过当前可收/付金额", "Amount exceeds balance"],
+  INVALID_REFUND: ["原流水可退款额不足", "Insufficient refundable amount"],
+  INVALID_REVERSAL: ["原流水无法冲正或金额不匹配", "Entry cannot be reversed"],
+  INVALID_FILE: ["仅支持有效PNG/JPEG，最多2MB", "Valid PNG/JPEG only, max 2MB"],
+  KEY_REUSED: [
+    "同一提交标识已被不同内容使用",
+    "Submission key used for different content",
+  ],
+  CONFLICT: ["记录已存在或被其他记录引用", "Duplicate or referenced record"],
+  WEAK_PASSWORD: [
+    "密码需12–72字节，含大小写和数字",
+    "Password: 12–72 bytes, upper/lower case and digits",
+  ],
+  LAST_ADMIN: [
+    "必须保留一个有效管理员",
+    "An enabled administrator must remain",
+  ],
+  CURRENCY_LOCKED: [
+    "已建立清单后不能变更币种",
+    "Currency is locked after work items exist",
+  ],
+  INVALID_DATES: ["请检查施工和计划日期", "Check project and work dates"],
+  INVALID_STATE: [
+    "当前状态不能执行该操作",
+    "Action unavailable in current state",
+  ],
+  PROJECT_NOT_ACTIVE: ["先激活工程合同", "Activate the contract first"],
+  LINKED_ACCOUNT_ROLE: [
+    "已绑定客户账号不可改变为内部岗位",
+    "Linked client role cannot become internal",
+  ],
+  INVALID_INPUT: [
+    "请检查必填项和输入长度",
+    "Check required fields and lengths",
+  ],
+  UNAUTHENTICATED: ["会话已结束，请重新登录", "Session ended; sign in again"],
+};
