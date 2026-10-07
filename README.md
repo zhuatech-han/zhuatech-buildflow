@@ -1,3 +1,5 @@
+[中文](README.md) | [English](README.en.md)
+
 <p><img src="frontend/public/brand/logo.jpg" height="56" alt="知华科技 LOGO"></p>
 
 # BuildFlow · 知华工程项目成本与结算
@@ -8,7 +10,7 @@
 
 ## 哪些团队可以评估
 
-适合装修、机电安装、小型施工承包团队，以及需要部署和适配工程软件的实施团队。一个企业实例、多部门、多项目；中英文、手机现场入口和客户本人查看入口。核心业务不需第三方账号。
+适合装修、机电安装、小型施工承包团队，以及需要部署和适配工程软件的实施团队。系统基于 Java 21／Spring Boot、Vue 3、MySQL 和 Flyway。一个企业实例、多部门、多项目；中英文、手机现场入口和客户本人查看入口。核心业务不需第三方账号。
 
 项目经理建立合同清单与分包单价；现场人员按完成量申报并上传照片；其他人员独立验收；财务审核按验收量计算的客户/分包结算，再登记已经完成的线下收付款。系统把未批准增项、未验收工程量、已结算量及尚欠款区分开，便于核对。
 
@@ -50,27 +52,41 @@
 | --- | --- |
 | ![登录](docs/images/screenshots/login.jpg) | ![工作台](docs/images/screenshots/workspace.jpg) |
 
+登录：会话认证。岗位工作台：按实际岗位和项目关联查看业务入口与待办。
+
 **合同工程量与验收**
 
 ![合同清单](docs/images/screenshots/work-items.jpg)
+
+合同清单：核对冻结单价、批准数量与施工验收。
 
 **结算、保留款及资金**
 
 ![结算](docs/images/screenshots/settlement.jpg)
 
+结算：记录客户和分包双向计量、保留款和实际资金流水。
+
 **单张结算单预览**
 
 ![结算单预览](docs/images/screenshots/bill-preview.jpg)
+
+结算单预览：核对当前单张账单的计量、净收付与余额。
 
 | 管理账号 | 项目成本 |
 | --- | --- |
 | ![账号](docs/images/screenshots/accounts.jpg) | ![成本报表](docs/images/screenshots/reports.jpg) |
 
+管理账号：配置部门、角色与启用状态。项目成本：核对已验收产值、直接成本、分包结算与应收应付。
+
 **角色与数据范围**
 
 ![角色权限](docs/images/screenshots/roles.jpg)
 
+角色权限：维护接口权限与部门、项目关联数据范围。
+
 <img src="docs/images/screenshots/site-mobile.jpg" height="440" alt="现场手机入口">
+
+现场手机入口：在窄屏布局中申报本人项目工程量与实际图片。
 
 ## 启动与首次使用
 
@@ -82,7 +98,7 @@ docker compose config --quiet
 docker compose up --build -d --wait --wait-timeout 240
 ```
 
-访问[http://127.0.0.1:8104/](http://127.0.0.1:8104/)，健康`/actuator/health`。端口被占用修改私有.env的WEB_PORT，不能停止其他项目。默认仅绑定本机。
+访问[http://127.0.0.1:8104/](http://127.0.0.1:8104/)，健康检查：[http://127.0.0.1:8104/actuator/health](http://127.0.0.1:8104/actuator/health)。端口被占用修改私有.env的WEB_PORT，不能停止其他项目。默认仅绑定本机。
 
 初始化账号`admin`，密码在本人私有.env的ADMIN_PASSWORD；init-env.py生成随机强密码、0600并拒绝覆盖。首次空库只有岗位、权限、菜单、字典和参数，没有客户或合同。随后创建项目经理、现场、财务和可选客户账号，再建合同清单和明确成员。具体[操作手册](docs/manual.md)。
 
@@ -108,15 +124,15 @@ docs/     操作、API、数据库、安全、测试和部署
 ## 验证与故障
 
 ```bash
-# backend
-mvn spotless:check test package
-# frontend
+# 在项目根目录执行后端检查。
+mvn -f backend/pom.xml spotless:check test package
+cd frontend
 npm ci
 npm run format:check
 npm run lint
 npm test
 npm run build
-# project root
+cd ..
 docker compose config --quiet
 python3 scripts/release-check.py
 git diff --check
@@ -138,3 +154,5 @@ git diff --check
 - 商业授权、定制开发、部署与系统集成咨询微信：`zhuatech`、`zhuatech2`
 
 <table><tr><td align="center"><img src="docs/images/wechat-zhuatech.png" height="200" alt="知华科技微信咨询 zhuatech"><br>微信：zhuatech</td><td align="center"><img src="docs/images/wechat-zhuatech2.png" height="200" alt="知华科技微信咨询 zhuatech2"><br>微信：zhuatech2</td></tr></table>
+
+商业授权或深度定制开发请联系知华科技。
